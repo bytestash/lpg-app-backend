@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
@@ -20,6 +21,7 @@ import com.hnaqvi.springreact.repo.CategoryRepository;
 import com.hnaqvi.springreact.repo.ProductRepository;
 
 @Component
+@ConditionalOnProperty(name = { "init.data" })
 public class InitialDataLoader implements ApplicationListener<ApplicationReadyEvent> {
 
 	static String[] CATEGORY_HEADER = {"ID", "CATEGORY_NAME"};
