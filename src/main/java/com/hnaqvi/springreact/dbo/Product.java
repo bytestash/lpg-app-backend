@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -16,7 +18,7 @@ import lombok.EqualsAndHashCode;
 @Table(name = "products")
 @EqualsAndHashCode(of = "id")
 @Entity
-public class ProductDBO {
+public class Product {
 
 	/** Auditing
 	 * For auditing spring provides an easy way to configure an update audit fields automatically. As I am reading the dates form file and populating the db the application (InitialDataLoader) using JPA repo, ...
@@ -25,6 +27,7 @@ public class ProductDBO {
 	 */
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 
 	private String name;
@@ -33,7 +36,7 @@ public class ProductDBO {
 
 	@ManyToOne
 	@JoinColumn(name="category_id", nullable=false)
-	private CategoryDBO category;
+	private Category category;
 
 	@Column(nullable = false)
 	private LocalDateTime creationDate;

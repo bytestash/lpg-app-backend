@@ -10,17 +10,17 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
-import com.hnaqvi.springreact.dbo.CategoryDBO;
-import com.hnaqvi.springreact.dbo.ProductDBO;
+import com.hnaqvi.springreact.dbo.Category;
+import com.hnaqvi.springreact.dbo.Product;
 import com.hnaqvi.springreact.repo.CategoryRepository;
 import com.hnaqvi.springreact.repo.ProductRepository;
 
 @Component
-public class InitialDataLoader implements ApplicationListener<ContextRefreshedEvent> {
+public class InitialDataLoader implements ApplicationListener<ApplicationReadyEvent> {
 
 	static String[] CATEGORY_HEADER = {"ID", "CATEGORY_NAME"};
 	//static String[] PRODUCT_HEADERS = {"ID", "NAME", "DESCRIPTION", "CATEGORY_ID", "CREATION_DATE", "UPDATE_DATE", "LAST_PURCHASED_DATE"};
@@ -34,7 +34,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		this.productRepository = productRepository;
 	}
 	@Override
-	public void onApplicationEvent(ContextRefreshedEvent event) {
+	public void onApplicationEvent(ApplicationReadyEvent event) {
 			loadCategories();
 			loadProducts();
 	}
@@ -44,7 +44,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 			var csvParser = new CSVParser(fileReader, CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim());
 			csvParser.getRecords().forEach(csvRecord ->
 			{
-				var category = new CategoryDBO();
+				var category = new Category();
 				category.setId(Long.parseLong(csvRecord.get("ID")));
 				category.setName(csvRecord.get("CATEGORY_NAME"));
 				categoryRepository.save(category);
@@ -57,14 +57,14 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 	private void loadProducts() {
 
 		// Read once.
-		final Map<Long, CategoryDBO> categories = categoryRepository.findAll().stream()
-				.collect(Collectors.toMap(CategoryDBO::getId, entry -> entry));
+		final Map<Long, Category> categories = categoryRepository.findAll().stream()
+				.collect(Collectors.toMap(Category::getId, entry -> entry));
 
 		try (var fileReader = Files.newBufferedReader(Path.of(this.getClass().getResource("/db/products.csv").toURI()), Charset.defaultCharset())) {
 			var csvParser = new CSVParser(fileReader, CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim());
 			csvParser.getRecords().forEach(csvRecord ->
 			{
-				var product = new ProductDBO();
+				var product = new Product();
 				product.setId(Long.parseLong(csvRecord.get("ID")));
 				product.setName(csvRecord.get("NAME"));
 				product.setCategory(categories.get(Long.parseLong(csvRecord.get("CATEGORY_ID"))));

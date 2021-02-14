@@ -4,3 +4,7 @@ spring:
     jpa:
         hibernate:
             ddl-auto: update
+
+    mvc:
+        format:
+            date-time: iso
