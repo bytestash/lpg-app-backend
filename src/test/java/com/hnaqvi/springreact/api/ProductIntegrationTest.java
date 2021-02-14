@@ -76,7 +76,7 @@ class ProductIntegrationTest {
 
 		final HttpEntity<String> request = new HttpEntity<>(productPayload, headers);
 
-		final ResponseEntity<String> response =  testRestTemplate.exchange("/product/", HttpMethod.POST, request, String.class);
+		final ResponseEntity<String> response =  testRestTemplate.exchange("/api/product/", HttpMethod.POST, request, String.class);
 
 		assertEquals(HttpStatus.CREATED, response.getStatusCode());
 
@@ -100,7 +100,7 @@ class ProductIntegrationTest {
 
 		final HttpEntity<String> request = new HttpEntity<>(productPayload, headers);
 
-		final ResponseEntity<String> response =  testRestTemplate.exchange("/product/", HttpMethod.POST, request, String.class);
+		final ResponseEntity<String> response =  testRestTemplate.exchange("/api/product/", HttpMethod.POST, request, String.class);
 
 		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
 
@@ -108,13 +108,13 @@ class ProductIntegrationTest {
 
 	@Test
 	void deletedProduct_expectThemInCache() throws InterruptedException {
-		testRestTemplate.delete("/product/1");
-		testRestTemplate.delete("/product/2");
-		testRestTemplate.delete("/product/3");
-		testRestTemplate.delete("/product/4");
-		testRestTemplate.delete("/product/5");
-		testRestTemplate.delete("/product/6");
-		testRestTemplate.delete("/product/7");
+		testRestTemplate.delete("/api/product/1");
+		testRestTemplate.delete("/api/product/2");
+		testRestTemplate.delete("/api/product/3");
+		testRestTemplate.delete("/api/product/4");
+		testRestTemplate.delete("/api/product/5");
+		testRestTemplate.delete("/api/product/6");
+		testRestTemplate.delete("/api/product/7");
 		var caffeineCache = (CaffeineCache) cacheManager.getCache("deleted_product");
 		var nativeCache = caffeineCache.getNativeCache();
 		assertEquals(5, nativeCache.asMap().keySet().size());

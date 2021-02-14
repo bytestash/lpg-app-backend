@@ -8,6 +8,9 @@ spring:
             ddl-auto: update
     cache:
         cache-names: deleted_product
+    data:
+        rest:
+            base-path: /api
     mvc:
         format:
             date-time: iso
