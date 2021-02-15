@@ -1,5 +1,6 @@
 init:
-    data: true
+    data:
+        enabled: true
 spring:
     datasource:
       url: jdbc:h2:file:./db;DB_CLOSE_ON_EXIT=FALSE

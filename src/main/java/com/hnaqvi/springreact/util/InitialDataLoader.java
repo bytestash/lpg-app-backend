@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
@@ -21,11 +22,8 @@ import com.hnaqvi.springreact.repo.CategoryRepository;
 import com.hnaqvi.springreact.repo.ProductRepository;
 
 @Component
-@ConditionalOnProperty(name = { "init.data" })
+@ConditionalOnProperty(name = { "init.data.enabled" })
 public class InitialDataLoader implements ApplicationListener<ApplicationReadyEvent> {
-
-	static String[] CATEGORY_HEADER = {"ID", "CATEGORY_NAME"};
-	//static String[] PRODUCT_HEADERS = {"ID", "NAME", "DESCRIPTION", "CATEGORY_ID", "CREATION_DATE", "UPDATE_DATE", "LAST_PURCHASED_DATE"};
 
 	final CategoryRepository categoryRepository;
 	final ProductRepository productRepository;
@@ -42,7 +40,8 @@ public class InitialDataLoader implements ApplicationListener<ApplicationReadyEv
 	}
 
 	private void loadCategories() {
-		try (var fileReader = Files.newBufferedReader(Path.of(this.getClass().getResource("/db/categories.csv").toURI()), Charset.defaultCharset())) {
+		// to read from classpath use: Files.newBufferedReader(Path.of(this.getClass().getResource("/db/categories.csv").toURI()), Charset.defaultCharset())
+		try (var fileReader = Files.newBufferedReader(Path.of("/tmp/categories.csv"), Charset.defaultCharset())) {
 			var csvParser = new CSVParser(fileReader, CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim());
 			csvParser.getRecords().forEach(csvRecord ->
 			{
@@ -62,7 +61,8 @@ public class InitialDataLoader implements ApplicationListener<ApplicationReadyEv
 		final Map<Long, Category> categories = categoryRepository.findAll().stream()
 				.collect(Collectors.toMap(Category::getId, entry -> entry));
 
-		try (var fileReader = Files.newBufferedReader(Path.of(this.getClass().getResource("/db/products.csv").toURI()), Charset.defaultCharset())) {
+		//try (var fileReader = Files.newBufferedReader(Path.of(this.getClass().getResource("/db/products.csv").toURI()), Charset.defaultCharset())) {
+		try (var fileReader = Files.newBufferedReader(Path.of("/tmp/products.csv"), Charset.defaultCharset())) {
 			var csvParser = new CSVParser(fileReader, CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim());
 			csvParser.getRecords().forEach(csvRecord ->
 			{

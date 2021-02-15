@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.hnaqvi</groupId>
-	<artifactId>spring-react</artifactId>
+	<artifactId>lpp-app-backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>spring-react</name>
-	<description>demo project with spring and react</description>
+	<name>lpp-app-backend</name>
+	<description>java 11 project with spring data rest</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
