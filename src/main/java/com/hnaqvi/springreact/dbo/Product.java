@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.springframework.data.rest.core.config.Projection;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
